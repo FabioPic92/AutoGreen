@@ -1,3 +1,6 @@
+#ifndef MATRIX_LED_H 
+#define MATRIX_LED_H
+
 #include "Arduino_LED_Matrix.h"
 
 const uint32_t online[] = {
@@ -40,3 +43,5 @@ public:
     }
 
 };
+
+#endif

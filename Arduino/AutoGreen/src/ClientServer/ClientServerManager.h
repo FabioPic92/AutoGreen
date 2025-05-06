@@ -1,3 +1,6 @@
+#ifndef CLIENT_SERVER_MANAGER_H
+#define CLIENT_SERVER_MANAGER_H
+
 #include "Server.h"
 #include "Client.h"
 
@@ -35,3 +38,4 @@ class ClientServerManager{
 
 };
 
+#endif

@@ -1,3 +1,6 @@
+#ifndef SERVER_H
+#define SERVER_H
+
 #include <string>
 
 #include "WiFiS3.h"
@@ -72,3 +75,5 @@ class Server {
 };
 
 }
+
+#endif

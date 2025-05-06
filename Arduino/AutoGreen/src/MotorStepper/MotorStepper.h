@@ -1,3 +1,6 @@
+#ifndef MOTOR_STEPPER_H
+#define MOTOR_STEPPER_H
+
 #include <AccelStepper.h>
 
 const int stepPin = 3;
@@ -44,3 +47,5 @@ public:
 private:
     int m_step;
 };
+
+#endif

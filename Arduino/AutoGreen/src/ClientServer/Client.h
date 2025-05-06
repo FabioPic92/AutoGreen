@@ -1,3 +1,6 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include "WiFiS3.h"
 
 namespace UnoR4 {
@@ -87,3 +90,5 @@ class Client {
 };
 
 }
+
+#endif
