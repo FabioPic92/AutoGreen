@@ -3,10 +3,7 @@ Progetto per la creazione di una serra autosufficiente (completamente automatizz
 
 ## Modello 1
 
-La funzionalità di questo modello consiste in un braccio robotico che si muove verticalmente su un'asta ed esegue le foto che verranno analizzate da un modello di rete neurale per riconoscere il tipo di pianta e capire se è matura o no.
-
-Questo modello sarà composto da un raspberry che dovrà gestire un microcontrollore che gestirà a sua volta sia il motore che la fotocamera.
-Le analisi dello foto verrannò fatti sul raspberry.
+Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità centrale di controllo e analisi. Il Raspberry gestirà un microcontrollore collegato, responsabile del controllo diretto del motore e della fotocamera. Le immagini acquisite verranno inviate dal microcontrollore al Raspberry, dove verranno effettuate le operazioni di elaborazione e analisi. 
 
 ### Struttura Meccanica e Hardware
 

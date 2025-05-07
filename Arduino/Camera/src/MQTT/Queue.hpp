@@ -17,14 +17,14 @@ struct Task{
     int step;
 };
 
-class VectorQueue{
+class Queue{
 private:
     Task vecQueue[sizeVector];
     int indexWrite;
     int indexRead;
 
 public:
-    VectorQueue()
+    Queue()
     : indexWrite(0), indexRead(0)
     {}
 
@@ -39,7 +39,7 @@ public:
     Task readTask(){
         if(indexWrite != indexRead)
         {
-            task = vecQueue[indexRead];
+            Task task = vecQueue[indexRead];
             indexRead = (indexRead + 1) % sizeVector;
             return task;
         }
