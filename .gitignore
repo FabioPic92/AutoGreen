@@ -57,3 +57,40 @@ docs/_build/
 
 # PyBuilder
 target/
+
+*.o
+*.a
+*.d
+*.elf
+*.eeprom
+*.bin
+*.hex
+*.cpp
+*.c
+*.h
+
+# Ignora le cartelle di output (per esempio, cartelle create dal build system)
+build/
+debug/
+release/
+*.temp/
+*.tlog/
+
+# Ignora il file di configurazione dell'IDE di Arduino
+*.arduino
+
+# Ignora le librerie esterne scaricate tramite il Library Manager di Arduino
+/libraries/*
+
+# Ignora la cartella del sistema di gestione delle librerie di PlatformIO
+.pio/
+
+# Ignora il file di configurazione di PlatformIO
+platformio.ini
+
+# Ignora i file di configurazione temporanei di Arduino IDE
+.idea/
+.vscode/
+
+# Ignora il file di configurazione di Arduino Sketchbook
+arduino.json
