@@ -1,75 +1,93 @@
-#include <WiFiS3.h>        // Libreria per WiFiS3
-#include <PubSubClient.h>   // Libreria MQTT
+#ifndef MQTT_H
+#define MQTT_H
 
-const char* ssid = "your-SSID";              // Nome della tua rete WiFi
-const char* password = "your-PASSWORD";      // Password della tua rete WiFi
+#include <WiFi.h>          // Libreria WiFi per ESP32
+#include <PubSubClient.h>  // Libreria MQTT
 
-const char* mqttServer = "192.168.1.100";    // IP del Raspberry Pi con EMQX
-const int mqttPort = 1883;                   // Porta MQTT
+const char* ssid = "A54";
+const char* password = "onow5432";
 
+// Configurazione MQTT
+const char* mqttServer = "192.168.77.85 ";  
+const int mqttPort = 1883;
+const char* mqttUser = "admin";  
+const char* mqttPassword = "public";  
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+class Omqx {
+private:
 
-// Ricezione messaggio MQTT
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Ricevuto su topic [");
-  Serial.print(topic);
-  Serial.print("]: ");
+        WiFiClient espClient;
+        PubSubClient client;
 
-  String message = "";
-  for (unsigned int i = 0; i < length; i++) {
-    message += (char)payload[i];
-  }
+public:
 
-  Serial.println(message);
-
-  // Puoi convertire in intero se serve
-  int number = message.toInt();
-  Serial.print("Numero ricevuto: ");
-  Serial.println(number);
-}
-
-void setup_wifi() {
-  delay(100);
-  Serial.print("Connessione a WiFi ");
-  Serial.println(ssid);
-
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  Serial.println("\nWiFi connesso.");
-  Serial.print("IP: ");
-  Serial.println(WiFi.localIP());
-}
-
-void reconnect() {
-  while (!client.connected()) {
-    Serial.print("Connessione al broker MQTT...");
-    if (client.connect("ESP32Client")) {
-      Serial.println("Connesso!");
-      client.subscribe(topic);
-    } else {
-      Serial.print("Errore: ");
-      Serial.println(client.state());
-      delay(5000);
+    Omqx() : client(espClient) 
+    {
+        setup_wifi();
+        client.setServer(mqttServer, mqttPort);
+        client.setCallback(callback);
     }
-  }
-}
 
-void setup() {
-  Serial.begin(115200);
-  setup_wifi();
-  client.setServer(mqtt_server, 1883);
-  client.setCallback(callback);
-}
+    void setup_wifi() {
+        delay(10);
 
-void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
-}
+        Serial.println();
+        Serial.print("Connessione a WiFi...");
+        WiFi.begin(ssid, password);
+
+        while (WiFi.status() != WL_CONNECTED) {
+          delay(500);
+          Serial.print(".");
+        }
+
+        Serial.println("WiFi connesso");
+        Serial.print("Indirizzo IP: ");
+        Serial.println(WiFi.localIP());
+    }
+
+    static void callback(char* topic, byte* payload, unsigned int length) {
+      Serial.print("Messaggio ricevuto su topic: ");
+      Serial.println(topic);
+
+      Serial.print("Messaggio: ");
+      for (int i = 0; i < length; i++) {
+        Serial.print((char)payload[i]);
+      }
+      Serial.println();
+    }
+
+    void reconnect() {
+      while (!client.connected()) {
+        Serial.print("Connessione al broker MQTT...");
+
+        // Tentativi di connessione
+        if (client.connect("ESP32Client", mqttUser, mqttPassword)) {
+          Serial.println("Connesso al broker MQTT!");
+          // Sottoscrizione al topic
+          client.subscribe("arduino/camera");
+        } else {
+          Serial.print("Errore di connessione, rc=");
+          Serial.print(client.state());
+          delay(5000);  // Attende 5 secondi prima di riprovare
+        }
+        Serial.print("\n");
+      }
+    }
+
+    void loop(){
+      if (!client.connected()) {
+        reconnect();
+      }
+      client.loop();
+    }
+};
+
+#endif
+
+
+// void loop() {
+//   if (!client.connected()) {
+//     reconnect();
+//   }
+//   client.loop();
+// }

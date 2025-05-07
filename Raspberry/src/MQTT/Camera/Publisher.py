@@ -9,6 +9,5 @@ async def main():
                 break
             await client.publish("arduino/camera", msg.encode())
 
-
 if __name__ == "__main__":
     asyncio.run(main())

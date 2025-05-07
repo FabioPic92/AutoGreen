@@ -1,13 +1,13 @@
 #ifndef SCHEDULE_H
 #define SCHEDULE_H
 
-#include "VectorQueue.hpp"
+#include "Queue.hpp"
 
 class Schedule{
 private:
-  VectorQueue vectorQueue;
+    Queue vectorQueue;
 public:
 
 };
 
-#ifndef
+#endif
