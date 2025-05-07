@@ -22,15 +22,16 @@ void setup() {
 
     matrixLed->setOnline();
 
-    motorStepper = new MotorStepper();
+    motorStepper = new MotorStepper(20);
 }
 
 void loop() {
-    clientServerManager->Refresh();
+    // clientServerManager->Refresh();
 
-    if (clientServerManager->isWifiConnected()) {
-        matrixLed->setOnline();
-    } else {
-        matrixLed->setOffline();
-    }
+    // if (clientServerManager->isWifiConnected()) {
+    //     matrixLed->setOnline();
+    // } else {
+    //     matrixLed->setOffline();
+    // }
+    motorStepper->step();
 }
