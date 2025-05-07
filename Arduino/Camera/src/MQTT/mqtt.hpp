@@ -7,7 +7,7 @@
 const char* ssid = "A54";
 const char* password = "onow5432";
 
-const char* mqttServer = "192.168.77.85 ";  
+
 const int mqttPort = 1883;
 const char* mqttUser = "admin";  
 const char* mqttPassword = "public";  
@@ -17,6 +17,7 @@ private:
 
     WiFiClient espClient;
     PubSubClient client;
+
 
 public:
 
@@ -64,7 +65,8 @@ public:
       int speed = doc["speed"];
       int duration = doc["duration"];
       const char* direction = doc["direction"];
-    }
+
+        
 
     void reconnect() {
       while (!client.connected()) {
