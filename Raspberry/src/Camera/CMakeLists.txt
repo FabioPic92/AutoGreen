@@ -1,5 +1,5 @@
 add_executable(publisher Publisher.cpp)
+target_link_libraries(publisher common_utils)
 
 add_executable(subscriber Subscriber.cpp)
-
-include_directories(${CMAKE_SOURCE_DIR}/include)
+target_link_libraries(subscriber common_utils)
