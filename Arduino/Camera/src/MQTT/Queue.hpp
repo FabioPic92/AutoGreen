@@ -19,35 +19,35 @@ struct Task{
 
 class Queue{
 private:
-    Task vecQueue[sizeVector];
-    int indexWrite;
-    int indexRead;
+    Task m_vecQueue[sizeVector];
+    int m_indexWrite;
+    int m_indexRead;
 
 public:
     Queue()
-    : indexWrite(0), indexRead(0)
+    : m_indexWrite(0), m_indexRead(0)
     {}
 
     bool writeTask(Task newTask){
       if(!isEmpty()){
-        vecQueue[indexWrite] = newTask;
-        indexWrite = (indexWrite + 1) % sizeVector;
+        m_vecQueue[indexWrite] = newTask;
+        m_indexWrite = m_(indexWrite + 1) % sizeVector;
       }
       return false;
     }
 
     Task readTask(){
-        if(indexWrite != indexRead)
+        if(m_indexWrite != m_indexRead)
         {
-            Task task = vecQueue[indexRead];
-            indexRead = (indexRead + 1) % sizeVector;
+            Task task = m_vecQueue[m_indexRead];
+            m_indexRead = (m_indexRead + 1) % sizeVector;
             return task;
         }
 
     }
 
     bool isEmpty(){
-      return indexWrite == indexRead;
+      return m_indexWrite == m_indexRead;
     }
 
 };

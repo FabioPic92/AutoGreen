@@ -5,7 +5,7 @@
 
 class Schedule{
 private:
-    Queue vectorQueue;
+    Queue m_queue;
 public:
 
 };
