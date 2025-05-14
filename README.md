@@ -35,6 +35,10 @@ verrà attaccata ad un asta attraverso una ruota dentata.
 
 TO-DO
 
+Per Paho fare export alle librerie in build/src per ogni terminale
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/Documents/Projects/AutoGreen/Raspberry/external/paho/paho.mqtt.cpp/build/src
+
 ## Licenza
 
 Questo progetto è distribuito con la licenza MIT.

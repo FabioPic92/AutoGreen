@@ -2,11 +2,6 @@
 
 #include <string>
 
-#include <boost/mqtt5/mqtt_client.hpp>
-#include <boost/asio/io_context.hpp>
-#include <boost/asio/ip/tcp.hpp>
-#include <boost/asio/detached.hpp>
-
 class Client {
 private:
     std::string m_serverAddress;
@@ -29,9 +24,5 @@ class ClientCamera : public Client {
 };
 
 void mqtt(){
-  boost::asio::io_context ioc;
-
-  boost::mqtt5::mqtt_client<boost::asio::ip::tcp::socket> client(ioc);
-
 
 }
