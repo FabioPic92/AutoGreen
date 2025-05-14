@@ -30,8 +30,8 @@ public:
 
     bool writeTask(Task newTask){
       if(!isEmpty()){
-        m_vecQueue[indexWrite] = newTask;
-        m_indexWrite = m_(indexWrite + 1) % sizeVector;
+        m_vecQueue[m_indexWrite] = newTask;
+        m_indexWrite = (m_indexWrite + 1) % sizeVector;
       }
       return false;
     }

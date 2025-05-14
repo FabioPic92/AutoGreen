@@ -5,14 +5,22 @@
 int led =  LED_BUILTIN;
 
 //MotorStepper motorStepper(20);
-Omqx *omqx;
+
+Omqx mqtt;
 
 void setup() {
     Serial.begin(9600);
-    omqx = new Omqx();
+    
+    Omqx::setInstance(&mqtt);  
+    mqtt.begin();              
+    mqtt.subscribe("raspberry/camera");
 }
 
 void loop() {
-    omqx->loop();
+    mqtt.loop();
+
+    int speed = mqtt.getSpeed();
+    int duration = mqtt.getDuration();
+    String direction = mqtt.getDirection();
    // motorStepper.step();
 }
