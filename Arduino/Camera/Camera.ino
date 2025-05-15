@@ -11,9 +11,9 @@ Omqx mqtt;
 void setup() {
     Serial.begin(9600);
     
+
     Omqx::setInstance(&mqtt);  
     mqtt.begin();              
-    mqtt.subscribe("raspberry/camera");
 }
 
 void loop() {

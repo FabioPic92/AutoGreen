@@ -6,8 +6,15 @@
 class Schedule{
 private:
     Queue m_queue;
-public:
 
+public:
+    bool AddTask(){
+        return true;
+    }
+
+    bool RemoveTask(){
+        return true;
+    }
 };
 
 #endif
