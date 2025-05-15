@@ -39,6 +39,18 @@ Per Paho fare export alle librerie in build/src per ogni terminale
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/Documents/Projects/AutoGreen/Raspberry/external/paho/paho.mqtt.cpp/build/src
 
+## Model
+
+Il primo modello che si è scelto riconoscera il tipo di verdura pomodorini.
+Il dataset scelto è quello di loboro Ai, nel nostro caso si è scelto il subdataset little tomato(http://assets.laboro.ai.s3.amazonaws.com/laborotomato/laboro_tomato_little.zip).
+Questo Dataset è composto da immagini di pomodorini e da un file json che indica la quantità e lo stato di maturazione in un file json.
+Purtroppo il dataset è piccolo(289  immagini) ma visto che le itichette di cui abbiamo bisogno sono poche ma per ora va bene.
+
+### Pre-Processed Dataset
+Il dataset è composto da foto di dimensioni quali: 3024*4032, 3120*4160 e simili.
+Mentre la fotocamera OV2640 ha risoluzione 1632x1232, perciò andiamo a scalare a 1280
+
+
 ## Licenza
 
 Questo progetto è distribuito con la licenza MIT.
