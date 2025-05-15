@@ -1,0 +1,17 @@
+names = ["l_fully_ripened", "l_half_ripened", "l_green"]
+
+yaml_content = f"""\
+path: .
+train: Dataset_with_validation/images/train
+val: Dataset_with_validation/images/val
+test: Dataset_with_validation/images/test
+
+nc: {len(names)}
+names:
+"""
+
+for name in names:
+    yaml_content += f"  - {name}\n"
+
+with open("dataset.yaml", "w") as f:
+    f.write(yaml_content)
