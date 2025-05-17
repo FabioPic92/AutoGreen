@@ -10,8 +10,10 @@ nc: {len(names)}
 names:
 """
 
-for name in names:
-    yaml_content += f"  - {name}\n"
 
-with open("dataset.yaml", "w") as f:
-    f.write(yaml_content)
+if __name__ == "__main__":
+    for name in names:
+        yaml_content += f"  - {name}\n"
+
+    with open("dataset.yaml", "w") as f:
+        f.write(yaml_content)

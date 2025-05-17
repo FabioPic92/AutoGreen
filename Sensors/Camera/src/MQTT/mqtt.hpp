@@ -1,7 +1,7 @@
 #ifndef MQTT_H
 #define MQTT_H
 
-#include <WiFiS3.h>
+#include <WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 

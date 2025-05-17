@@ -4,7 +4,7 @@
 
 int led =  LED_BUILTIN;
 
-//MotorStepper motorStepper(20);
+MotorStepper motorStepper(20);
 
 Omqx mqtt;
 
@@ -12,15 +12,15 @@ void setup() {
     Serial.begin(9600);
     
 
-    Omqx::setInstance(&mqtt);  
-    mqtt.begin();              
+    // Omqx::setInstance(&mqtt);  
+    // mqtt.begin();              
 }
 
 void loop() {
-    mqtt.loop();
+    // mqtt.loop();
 
-    int speed = mqtt.getSpeed();
-    int duration = mqtt.getDuration();
-    String direction = mqtt.getDirection();
-   // motorStepper.step();
+    // int speed = mqtt.getSpeed();
+    // int duration = mqtt.getDuration();
+    // String direction = mqtt.getDirection();
+    motorStepper.step();
 }

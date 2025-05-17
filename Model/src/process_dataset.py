@@ -5,7 +5,6 @@ import shutil
 import cv2
 import numpy as np
 
-
 VAL_RATIO = 0.2
 TARGET_SIZE = (1280, 1280)
 
@@ -24,6 +23,18 @@ os.makedirs(DST_TRAIN_DIR, exist_ok=True)
 os.makedirs(DST_VAL_DIR, exist_ok=True)
 os.makedirs(DST_TEST_DIR, exist_ok=True)
 
+def load_file_dataset_json(path_annotations_json):
+    with open(os.path.join(path_annotations_json, "train.json"), "r") as f:
+        data = json.load(f)
+
+    images = data["images"]
+    annotations = data["annotations"]
+    categories = data["categories"]
+    info = data.get("info", {})
+    licenses = data.get("licenses", [])
+
+    return images, annotations, categories, info, licenses
+
 def letterbox_resize(image, target_size=(1280, 1280), color=(114, 114, 114)):
     h, w = image.shape[:2]
     target_w, target_h = target_size
@@ -38,14 +49,7 @@ def letterbox_resize(image, target_size=(1280, 1280), color=(114, 114, 114)):
     return img_padded, scale, (pad_w, pad_h)
 
 def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path, target_size):
-    with open(json_path, "r") as f:
-        data = json.load(f)
-
-    images = data["images"]
-    annotations = data["annotations"]
-    categories = data["categories"]
-    info = data.get("info", {})
-    licenses = data.get("licenses", [])
+    images, annotations, categories, info, licenses = load_file_dataset_json(json_path)
 
     new_images = []
     new_annotations = []
@@ -57,12 +61,12 @@ def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path
         dst_path = os.path.join(image_dst_dir, filename)
 
         if not os.path.exists(src_path):
-            print(f"⚠️ Immagine mancante: {src_path}")
+            print(f"Image don't found: {src_path}")
             continue
 
         image = cv2.imread(src_path)
         if image is None:
-            print(f"⚠️ Errore lettura: {src_path}")
+            print(f"Error read: {src_path}")
             continue
 
         resized_image, scale, (pad_w, pad_h) = letterbox_resize(image, target_size)
@@ -92,18 +96,11 @@ def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path
     with open(output_json_path, "w") as f:
         json.dump(output_data, f, indent=4)
 
-    print(f"✅ Salvato {output_json_path} con {len(new_images)} immagini")
+    print(f"Save {output_json_path} with {len(new_images)} images")
 
 
 if __name__ == "__main__":
-    with open(os.path.join(SRC_ANNOTATIONS_DIR, "train.json"), "r") as f:
-        train_data = json.load(f)
-
-    images = train_data["images"]
-    annotations = train_data["annotations"]
-    categories = train_data["categories"]
-    info = train_data.get("info", {})
-    licenses = train_data.get("licenses", [])
+    images, annotations, categories, info, licenses = load_file_dataset_json(SRC_ANNOTATIONS_DIR)
 
     random.shuffle(images)
     val_size = int(len(images) * VAL_RATIO)
@@ -145,4 +142,4 @@ if __name__ == "__main__":
     os.remove(train_json_temp)
     os.remove(val_json_temp)
 
-    print("🎉 Dataset pronto! Tutto ridimensionato e salvato.")
+    print("Dataset Done!")

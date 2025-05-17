@@ -7,10 +7,8 @@ def coco_to_yolo(json_path, output_dir, image_dir, img_size=(1280, 1280)):
 
     os.makedirs(output_dir, exist_ok=True)
 
-    # Mappa immagini
     image_map = {img["id"]: img for img in data["images"]}
 
-    # Organizza annotazioni per immagine
     ann_map = {}
     for ann in data["annotations"]:
         img_id = ann["image_id"]
@@ -29,13 +27,13 @@ def coco_to_yolo(json_path, output_dir, image_dir, img_size=(1280, 1280)):
             yc = (y + h / 2) / img_h
             ww = w / img_w
             hh = h / img_h
-            category_id = ann["category_id"] - 1  # class_id deve iniziare da 0
+            category_id = ann["category_id"] - 1 
             lines.append(f"{category_id} {xc:.6f} {yc:.6f} {ww:.6f} {hh:.6f}")
 
         with open(label_path, "w") as f:
             f.write("\n".join(lines))
 
-# Esempio
-coco_to_yolo("Dataset_with_validation/annotations/train_resized.json", "labels/train", "Dataset_with_validation/images/train")
-coco_to_yolo("Dataset_with_validation/annotations/val_resized.json", "labels/val", "Dataset_with_validation/images/val")
-coco_to_yolo("Dataset_with_validation/annotations/test_resized.json", "labels/test", "Dataset_with_validation/images/test")
+if __name__ == "__main__":
+    coco_to_yolo("Dataset_with_validation/annotations/train_resized.json", "labels/train", "Dataset_with_validation/images/train")
+    coco_to_yolo("Dataset_with_validation/annotations/val_resized.json", "labels/val", "Dataset_with_validation/images/val")
+    coco_to_yolo("Dataset_with_validation/annotations/test_resized.json", "labels/test", "Dataset_with_validation/images/test")
