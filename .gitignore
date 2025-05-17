@@ -1,14 +1,10 @@
-# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 db.sqlite3
 migrations/
 media/
 settings.py
-# C extensions
-*.so
 
-# Distribution / packaging
 .Python
 env/
 build/
@@ -26,17 +22,12 @@ var/
 *.egg
 lib/
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
 
-# Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Unit test / coverage reports
 htmlcov/
 .tox/
 .coverage
@@ -46,17 +37,13 @@ nosetests.xml
 coverage.xml
 *,cover
 
-# Translations
 *.mo
 *.pot
 
-# Django stuff:
 *.log
 
-# Sphinx documentation
 docs/_build/
 
-# PyBuilder
 target/
 
 *.o
@@ -67,31 +54,24 @@ target/
 *.bin
 *.hex
 
-# Ignora le cartelle di output (per esempio, cartelle create dal build system)
 build/
 debug/
 release/
 *.temp/
 *.tlog/
 
-# Ignora il file di configurazione dell'IDE di Arduino
 *.arduino
 
-# Ignora le librerie esterne scaricate tramite il Library Manager di Arduino
 /libraries/*
 
-# Ignora la cartella del sistema di gestione delle librerie di PlatformIO
 .pio/
 
-# Ignora il file di configurazione di PlatformIO
 platformio.ini
 
-# Ignora i file di configurazione temporanei di Arduino IDE
 .idea/
 .vscode/
 
-# Ignora il file di configurazione di Arduino Sketchbook
 arduino.json
 
-external/json
+/Sensors/Camera/libraries/*
 

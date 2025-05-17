@@ -10,12 +10,12 @@ Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità ce
 ####  Componenti Principali Hardware:
 
 - **Microcontrollore**:
-  - **Arduino UNO R4 Wifi**, per il controllo del Motore stepper e della fotocamera.
+  - **Esp-S3**, per il controllo del Motore stepper e della fotocamera.
   - **Raspberry Pi3 Model B**, Per la gestine dei vari microcontrollori ed esecuzione di task.
 - **Attuatori**:
   - **Motore Stepper Nema 17 17hs15-1504sx1**, Motore che serve per alzare e abbassare la piastra che contiene la fotocamera.
 - **Sensori**:
-  - **Fotocamera OV7670**, Esegue le foto che verranno inviate al raspberry.
+  - **Fotocamera OV2460**, Esegue le foto che verranno inviate al raspberry.
 
 #### Struttura Meccanica
 
