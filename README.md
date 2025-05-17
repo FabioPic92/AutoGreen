@@ -74,6 +74,10 @@ Nel caso non trovasse i file .so e .a in ogni terminale in cui lanciate un nodo 
 1. chmod +x configure.sh
 2. ./configure.sh
 
+#### Install Opencv
+
+sudo apt install libopencv-dev python3-opencv
+
 ## Model
 
 Il primo modello che si è scelto riconoscera il tipo di verdura pomodorini.
