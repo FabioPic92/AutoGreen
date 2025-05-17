@@ -7,17 +7,17 @@ image_path = "./Dataset_with_validation/images/train/IMG_1147.jpg"
 
 image = cv2.imread(image_path)
 
-with open(json_path, 'r') as f:
+with open(json_path, "r") as f:
     data = json.load(f)
 
-images = data['images']
+images = data["images"]
 annotations = data["annotations"]
 
 image_name = "IMG_1147.jpg"
 
 id = ""
 for im in images:
-    if im['file_name'] == image_name:
+    if im["file_name"] == image_name:
         id = im["id"]
     
 print(f"ID: {id}")
@@ -39,18 +39,17 @@ for annotation in annotations:
 
         for i in range(4):
             start_point = points[i]
-            end_point = points[(i + 1) % 4]  # collega l'ultimo al primo
+            end_point = points[(i + 1) % 4] 
             cv2.line(image, start_point, end_point, color=(0, 255, 0), thickness=2)
 
         cv2.putText(
             image, 
-            type,        # Testo
-            (int(x), int(y + 10)),                 # Posizione (x, y)
-            cv2.FONT_HERSHEY_SIMPLEX, # Font
-            1,                        # Scala font
-            (0, 0, 0),              # Colore (verde)
-            2,                        # Spessore
-            cv2.LINE_AA               # Antialiasing
+            type,        
+            (int(x), int(y + 10)),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,                        
+            (0, 0, 0),              
+            2,                        
+            cv2.LINE_AA              
         )
-
 cv2.imwrite('saved_image.jpg', image)

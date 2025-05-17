@@ -55,7 +55,7 @@ def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path
     new_annotations = []
 
     for img in images:
-        filename = img['file_name']
+        filename = img["file_name"]
         img_id = img['id']
         src_path = os.path.join(image_src_dir, filename)
         dst_path = os.path.join(image_dst_dir, filename)
@@ -72,17 +72,17 @@ def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path
         resized_image, scale, (pad_w, pad_h) = letterbox_resize(image, target_size)
         cv2.imwrite(dst_path, resized_image)
 
-        img['width'], img['height'] = target_size
+        img["width"], img["height"] = target_size
         new_images.append(img)
 
         for ann in annotations:
-            if ann['image_id'] == img_id:
-                x, y, w, h = ann['bbox']
+            if ann["image_id"] == img_id:
+                x, y, w, h = ann["bbox"]
                 x = x * scale + pad_w
                 y = y * scale + pad_h
                 w = w * scale
                 h = h * scale
-                ann['bbox'] = [x, y, w, h]
+                ann["bbox"] = [x, y, w, h]
                 new_annotations.append(ann)
 
     output_data = {

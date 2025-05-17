@@ -353,11 +353,11 @@ import argparse
 from ultralytics import YOLO
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--image', type=str, required=True)
+parser.add_argument("--image", type=str, required=True)
 args = parser.parse_args()
 
 
-model = YOLO('runs/train/exp_yolov8/weights/best.pt')
+model = YOLO("../Models/LittleTomatoModel.pt")
 
 results = model(args.image)
 
@@ -370,7 +370,7 @@ Di seguito riporto i risultati del primo training.
 ![Training Results](Model/result/results.png)
 [Scarica il file CSV](Model/result/results.csv)
 
-Alla 50 epochc risultati ottenuti sono:
+Alla 50 epoch risultati ottenuti sono:
 | **Metrica**    | **Valore** |
 |----------------|------------|
 | Precisione     | 0.80521    |

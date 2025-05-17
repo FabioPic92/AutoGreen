@@ -1,12 +1,12 @@
-from ultralytics import YOLO
 import argparse
+from ultralytics import YOLO
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--image', type=str, required=True)
+parser.add_argument("--image", type=str, required=True)
 args = parser.parse_args()
 
 
-model = YOLO('runs/train/exp_yolov8/weights/best.pt')
+model = YOLO("../Models/LittleTomatoModel.pt")
 
 results = model(args.image)
 

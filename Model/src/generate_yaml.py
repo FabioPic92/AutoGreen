@@ -10,7 +10,6 @@ nc: {len(names)}
 names:
 """
 
-
 if __name__ == "__main__":
     for name in names:
         yaml_content += f"  - {name}\n"
