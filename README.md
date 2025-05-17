@@ -33,11 +33,46 @@ verrà attaccata ad un asta attraverso una ruota dentata.
 
 ## Installazione e Setup
 
-TO-DO
+### Core
 
-Per Paho fare export alle librerie in build/src per ogni terminale
+#### Build
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/Documents/Projects/AutoGreen/Raspberry/external/paho/paho.mqtt.cpp/build/src
+1. cd AutoGreen/Core
+2. mkdir build
+3. cd build
+4. cmake ..
+5. make
+
+questo genererà i file eseguibili per i vari nodi
+
+#### Install Paho Library
+
+La libreria va installata in locale sia per C che C++
+
+Versione C
+
+1. git clone https://github.com/eclipse-paho/paho.mqtt.c.git
+2. cd paho.mqtt.c
+3. cmake -B build -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_SHARED=OFF -DPAHO_BUILD_SAMPLES=OFF -DPAHO_ENABLE_TESTING=OFF
+4. cmake --build build
+
+Nella cartella build/src dovresti trovare i file .a (es. libpaho-mqtt3as.a)
+
+Versione C++
+
+1. git clone https://github.com/eclipse/paho.mqtt.cpp
+2. cd paho.mqtt.cpp
+3. git submodule init
+4. git submodule update
+5. cmake -Bbuild -H. -DPAHO_WITH_MQTT_C=ON -DPAHO_BUILD_EXAMPLES=ON
+6. sudo cmake --build build/ --target install
+
+#### Tips
+
+Nel caso non trovasse i file .so e .a in ogni terminale in cui lanciate un nodo con paho eseguite i comandi:
+
+1. chmod +x configure.sh
+2. ./configure.sh
 
 ## Model
 

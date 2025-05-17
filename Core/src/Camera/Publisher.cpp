@@ -3,7 +3,6 @@
 #include <mqtt/async_client.h>
 #include <json.hpp> 
 
-namespace Mqtt {
 
 enum Direction{
     FORWARD,
@@ -43,6 +42,4 @@ int main() {
     }
 
     return 0;
-}
-
 }

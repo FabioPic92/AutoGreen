@@ -8,6 +8,9 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 
 find_package(OpenCV REQUIRED)
 
+set(OpenCV_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS} CACHE INTERNAL "")
+set(OpenCV_LIBS ${OpenCV_LIBS} CACHE INTERNAL "")
+
 set(PahoMqttCpp_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/external/paho/paho.mqtt.cpp/build/src")
 set(PahoMqttC_LIBRARY_PATH "${CMAKE_SOURCE_DIR}/external/paho/paho.mqtt.c/build/src")
 

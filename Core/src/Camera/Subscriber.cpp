@@ -6,8 +6,6 @@
 #include <opencv2/dnn.hpp>
 #include <opencv2/opencv.hpp>
 
-namespace Mqtt {
-
 class callback : public virtual mqtt::callback {
 public:
     void message_arrived(mqtt::const_message_ptr message) override {
@@ -47,6 +45,4 @@ int main() {
     }
 
     return 0;
-}
-
 }
