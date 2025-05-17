@@ -370,6 +370,15 @@ Di seguito riporto i risultati del primo training.
 ![Training Results](Model/result/results.png)
 [Scarica il file CSV](Model/result/results.csv)
 
+Alla 50 epochc risultati ottenuti sono:
+| **Metrica**    | **Valore** |
+|----------------|------------|
+| Precisione     | 0.80521    |
+| Recall         | 0.82732    |
+| mAP@50         | 0.89262    |
+| mAP@50-95      | 0.769      |
+
+Per ora sono buoni, bisogna fare altri test per capire se c'è bisogno di migliorare.
 
 ## Licenza
 
