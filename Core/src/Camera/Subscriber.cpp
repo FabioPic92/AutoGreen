@@ -9,16 +9,16 @@
 class callback : public virtual mqtt::callback {
 public:
     void message_arrived(mqtt::const_message_ptr message) override {
-        std::cout << "Messaggio ricevuto su topic: " << message->get_topic() << "\n"
+        std::cout << "Message recive to topic: " << message->get_topic() << "\n"
                 << "Payload: " << message->to_string() << std::endl;
     }
 
     void connected(const std::string& cause) override {
-        std::cout << "Connesso con successo al broker MQTT!" << std::endl;
+        std::cout << "Connect to broker MQTT!" << std::endl;
     }
 
     void connection_lost(const std::string& cause) override {
-        std::cout << "Connessione persa: " << cause << std::endl;
+        std::cout << "Connection Lost: " << cause << std::endl;
     }
 };
 
@@ -34,7 +34,7 @@ int main() {
     try {
         client.connect(connOpts)->wait();
 
-        client.subscribe("arduino/Camera", 1);
+        client.subscribe("sensors/Camera", 1);
 
         while (true) {
             std::this_thread::sleep_for(std::chrono::seconds(1));

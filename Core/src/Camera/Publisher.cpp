@@ -32,7 +32,7 @@ int main() {
 
     try {
         client.connect(connOpts)->wait();
-        auto msg = mqtt::make_message("raspberry/camera", payload_str);
+        auto msg = mqtt::make_message("core/camera", payload_str);
         client.publish(msg)->wait();
         client.disconnect()->wait();
         std::cout << "Published!" << std::endl;

@@ -88,7 +88,9 @@ sudo apt install libopencv-dev python3-opencv
 2. source Modelenv/bin/activate
 3. pip install -r requirements.txt
 
-## Model
+# Core
+
+# Model
 
 Il primo modello che si è scelto avrà lo scopo di riconoscere se una pianta di pomodorini sarà matura o no.
 Il dataset scelto è quello di loboro Ai, nel nostro caso si è scelto il subdataset little tomato(http://assets.laboro.ai.s3.amazonaws.com/laborotomato/laboro_tomato_little.zip).
@@ -103,13 +105,13 @@ Fasi per l'addestramento:
 
 
 ### Studio modello 
-Per ora si è scelto il modello YOLOv8 in quanto soddisfa le nostre necessità
+Per ora si è scelto il modello YOLOv8 in quanto soddisfa le nostre necessità.
 In futuro svilupperò un modello personale
 
 ### Pre-Processed Dataset
-Come detto precedentemente il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160 e simili e da un file json che con
+Come detto precedentemente il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160.
 Mentre la fotocamera OV2640 ha risoluzione 1600x1200.
-In quanto il modello ha necessiatà di foto quadrata andiamo a modificare le immagini ad una size di 1280x1280.
+In quanto il modello ho necessiatà di foto quadrata andiamo a modificare le immagini ad una size di 1280x1280.
 In secondo luogo abbiamobisogno di un set per la validazione perciò si andrà a creare 2 set Train e Val a partire dal set di Train.
 Per convenzione si andrà a fare una divisone 80/20 dove 80 è il train e il 20 e il set di validazione.
 
@@ -347,7 +349,7 @@ model.train(
 )
 ```
 ### Test Model
-Il test sui risultati è stato fatto con il set test.\
+Il test sui risultati è stato fatto con il set test:\
 ```python
 import argparse
 from ultralytics import YOLO
@@ -370,7 +372,7 @@ Di seguito riporto i risultati del primo training.
 ![Training Results](Model/result/results.png)
 [Scarica il file CSV](Model/result/results.csv)
 
-Alla 50 epoch risultati ottenuti sono:
+I risultati finali ottenuti sono:
 | **Metrica**    | **Valore** |
 |----------------|------------|
 | Precisione     | 0.80521    |
