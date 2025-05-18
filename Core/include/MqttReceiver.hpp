@@ -15,12 +15,12 @@ public:
     bool get_next_message(std::pair<std::string, std::string>& out);
 
 private:
-    mqtt::async_client client;
-    std::string topic_;
+    mqtt::async_client m_client;
+    std::string m_topic;
 
-    std::queue<std::pair<std::string, std::string>> queue_;
-    std::mutex mutex_;
-    std::condition_variable cv_;
+    std::queue<std::pair<std::string, std::string>> m_queue;
+    std::mutex m_mutex;
+    std::condition_variable m_cv;
 
     void message_arrived(mqtt::const_message_ptr msg) override;
 };

@@ -29,9 +29,9 @@ private:
     WiFiClient espClient;
     PubSubClient client;
 
-    int receivedSpeed = 0;
-    int receivedDuration = 0;
-    String receivedDirection = "";
+    int m_receivedSpeed = 0;
+    int m_receivedDuration = 0;
+    String m_receivedDirection = "";
 
 public:
     Omqx() : client(espClient) 
@@ -47,47 +47,45 @@ public:
 
     void setup_wifi() {
         delay(10);
-        Serial.println("\nConnessione a WiFi...");
+        Serial.println("\nConnecting to WiFi...");
         WiFi.begin(ssid, password);
 
-        while (WiFi.status() != WL_CONNECTED) {
+        while(WiFi.status() != WL_CONNECTED) {
             delay(500);
             Serial.print(".");
         }
 
-        Serial.println("\nWiFi connesso");
-        Serial.print("Indirizzo IP: ");
+        Serial.println("\nWiFi connected");
+        Serial.print("Address IP: ");
         Serial.println(WiFi.localIP());
     }
 
     void reconnect() {
-        while (!client.connected()) {
-            Serial.print("Connessione al broker MQTT...");
+        while(!client.connected()) {
+            Serial.print("Connetting to broker MQTT...");
             String clientId = "ESP32Client-" + getMacAddress();
             if (client.connect(clientId.c_str(), mqttUser, mqttPassword)) {
-                Serial.println("Connesso!");
+                Serial.println("Connected!");
                 subscribe("raspberry/camera");
             } else {
-                Serial.print("Errore, rc=");
-                Serial.print(client.state());
-                Serial.println("... ritento in 5 secondi");
+                Serial.print("Error, rc=", client.state(), "... 5 seconds");
                 delay(5000);
             }
         }
     }
 
     void subscribe(const char* topic) {
-        if (client.connected()) {
+        if(client.connected()) {
             client.subscribe(topic);
-            Serial.print("Iscritto al topic: ");
+            Serial.print("Subscribe on topic: ");
             Serial.println(topic);
         }
     }
 
     void publish(const char* topic, const char* message) {
-        if (client.connected()) {
+        if(client.connected()) {
             client.publish(topic, message);
-            Serial.print("Pubblicato su ");
+            Serial.print("Pubblic on");
             Serial.print(topic);
             Serial.print(": ");
             Serial.println(message);
@@ -101,9 +99,9 @@ public:
         client.loop();
     }
 
-    int getSpeed() const { return receivedSpeed; }
-    int getDuration() const { return receivedDuration; }
-    String getDirection() const { return receivedDirection; }
+    int getSpeed() const { return m_receivedSpeed; }
+    int getDuration() const { return m_receivedDuration; }
+    String getDirection() const { return m_receivedDirection; }
 
 private:
     static void callbackWrapper(char* topic, byte* payload, unsigned int length) {
@@ -111,7 +109,7 @@ private:
     }
 
     void handleCallback(char* topic, byte* payload, unsigned int length) {
-        Serial.print("Messaggio ricevuto su topic: ");
+        Serial.print("Messagge recrive on topic: ");
         Serial.println(topic);
 
         char jsonBuffer[length + 1];
@@ -122,20 +120,18 @@ private:
         DeserializationError error = deserializeJson(doc, jsonBuffer);
 
         if (error) {
-            Serial.print("Errore parsing JSON: ");
+            Serial.print("Error parsing JSON: ");
             Serial.println(error.c_str());
             return;
         }
 
-        receivedSpeed = doc["speed"] | 0;
-        receivedDuration = doc["duration"] | 0;
-        receivedDirection = doc["direction"] | "";
+        m_receivedSpeed = doc["speed"] | 0;
+        m_receivedDuration = doc["duration"] | 0;
+        m_receivedDirection = doc["direction"] | "";
 
-        Serial.println("==== Dati Ricevuti ====");
-        Serial.print("Speed: "); Serial.println(receivedSpeed);
-        Serial.print("Duration: "); Serial.println(receivedDuration);
-        Serial.print("Direction: "); Serial.println(receivedDirection);
-        Serial.println("=======================");
+        Serial.print("Speed: "); Serial.println(m_receivedSpeed);
+        Serial.print("Duration: "); Serial.println(m_receivedDuration);
+        Serial.print("Direction: "); Serial.println(m_receivedDirection);
     }
 
     static Omqx* instance;

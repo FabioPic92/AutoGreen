@@ -2,32 +2,32 @@
 #include <iostream>
 
 MQTTReceiver::MQTTReceiver(const std::string& address, const std::string& topic)
-    : client(address, "ReceiverClient"), topic_(topic) {
-    client.set_callback(*this);
+    : m_client(address, "ReceiverClient"), m_topic(topic) {
+    m_client.set_callback(*this);
 }
 
 void MQTTReceiver::start() {
     mqtt::connect_options conn_opts;
     conn_opts.set_clean_session(true);
-    client.connect(conn_opts)->wait();
-    client.subscribe(topic_, 1)->wait();
-    std::cout << "✅ Connesso a " << topic_ << std::endl;
+    m_client.connect(conn_opts)->wait();
+    m_client.subscribe(m_topic, 1)->wait();
+    std::cout << "Connect to" << m_topic << std::endl;
 }
 
 void MQTTReceiver::message_arrived(mqtt::const_message_ptr msg) {
-    std::lock_guard<std::mutex> lock(mutex_);
-    queue_.emplace(msg->get_topic(), msg->to_string());
-    cv_.notify_one();
+    std::lock_guard<std::mutex> lock(m_mutex);
+    m_queue.emplace(msg->get_topic(), msg->to_string());
+    m_cv.notify_one();
 }
 
 bool MQTTReceiver::get_next_message(std::pair<std::string, std::string>& out) {
-    std::unique_lock<std::mutex> lock(mutex_);
-    if (queue_.empty()) {
-        cv_.wait(lock, [&]{ return !queue_.empty(); });
-    }
-    if (!queue_.empty()) {
-        out = queue_.front();
-        queue_.pop();
+    std::unique_lock<std::mutex> lock(m_mutex);
+    if (m_queue.empty()) {
+        m_cv.wait(lock, [&]{ return !m_queue.empty(); });
+        return false;
+    } else {
+        out = m_queue.front();
+        m_queue.pop();
         return true;
     }
     return false;
