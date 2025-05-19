@@ -12,8 +12,8 @@ SRC_ANNOTATIONS_DIR = "../Dataset/annotations"
 SRC_IMAGE_TRAIN_DIR = "../Dataset/train"
 SRC_IMAGE_TEST_DIR = "../Dataset/test"
 
-DST_ANNOTATIONS_DIR = "Dataset_with_validation/annotations"
-DST_IMAGE_DIR = "Dataset_with_validation/images"
+DST_ANNOTATIONS_DIR = "../Dataset_with_validation/annotations"
+DST_IMAGE_DIR = "../Dataset_with_validation/images"
 DST_TRAIN_DIR = os.path.join(DST_IMAGE_DIR, "train")
 DST_VAL_DIR = os.path.join(DST_IMAGE_DIR, "val")
 DST_TEST_DIR = os.path.join(DST_IMAGE_DIR, "test")

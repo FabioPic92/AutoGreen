@@ -55,9 +55,8 @@ public:
             Serial.print(".");
         }
 
-        Serial.println("\nWiFi connected");
-        Serial.print("Address IP: ");
-        Serial.println(WiFi.localIP());
+        Serial.println("\nWiFi connected", "Address IP: ", WiFi.localIP());
+
     }
 
     void reconnect() {
