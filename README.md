@@ -73,10 +73,9 @@ Versione C++
 
 #### Tips
 
-Nel caso non trovasse i file .so e .a in ogni terminale in cui lanciate un nodo con paho eseguite i comandi:
+Nel caso non trovasse i file .so e .a in ogni terminale in cui lanciate un nodo con paho eseguite lo script:
 
-1. chmod +x configure.sh
-2. ./configure.sh
+1. ./configure.sh
 
 #### Install Opencv
 
@@ -90,9 +89,11 @@ sudo apt install libopencv-dev python3-opencv
 
 # Core
 
+TO-DO
+
 # Model
 
-Il primo modello che si è scelto avrà lo scopo di riconoscere se una pianta di pomodorini sarà matura o no.
+Il primo modello scelto avrà lo scopo di riconoscere se una pianta di pomodorini sarà matura o no.
 Il dataset scelto è quello di loboro Ai, nel nostro caso si è scelto il subdataset little tomato(http://assets.laboro.ai.s3.amazonaws.com/laborotomato/laboro_tomato_little.zip).
 Questo Dataset è composto da immagini di piante di pomodorini e da un file json che indica la quantità e lo stato di maturazione(l_fully_ripened l_half_ripened, l_green) in un file json.
 Purtroppo il dataset è piccolo(289 immagini per il training e 70 per il test) ma visto che le etichette di cui abbiamo bisogno sono poche(nello specifico 3) per ora va bene.
@@ -105,8 +106,8 @@ Fasi per l'addestramento:
 
 
 ### Studio modello 
-Per ora si è scelto il modello YOLOv8 in quanto soddisfa le nostre necessità.
-In futuro svilupperò un modello personale
+Per ora si è scelto il modello YOLOv5 in quanto soddisfa le nostre necessità.
+In futuro si pensa di sviluppare un proprio modello
 
 ### Pre-Processed Dataset
 Come detto precedentemente il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160.
@@ -334,10 +335,11 @@ if __name__ == "__main__":
 ```
 
 Di seguito si procede con il training:
+Il modello base è 
 ```python
 from ultralytics import YOLO
 
-model = YOLO("Models/LittleTomatoModel.pt")
+model = YOLO("Models/yolov5s.pt")
 
 model.train(
     data="Dataset_with_validation/dataset.yaml",
