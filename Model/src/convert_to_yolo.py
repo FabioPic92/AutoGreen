@@ -34,6 +34,6 @@ def coco_to_yolo(json_path, output_dir, image_dir, img_size=(1280, 1280)):
             f.write("\n".join(lines))
 
 if __name__ == "__main__":
-    coco_to_yolo("Dataset_with_validation/annotations/train_resized.json", "labels/train", "Dataset_with_validation/images/train")
-    coco_to_yolo("Dataset_with_validation/annotations/val_resized.json", "labels/val", "Dataset_with_validation/images/val")
-    coco_to_yolo("Dataset_with_validation/annotations/test_resized.json", "labels/test", "Dataset_with_validation/images/test")
+    coco_to_yolo("Dataset_with_validation/annotations/train_resized.json", "Dataset_with_validation/labels/train", "Dataset_with_validation/images/train")
+    coco_to_yolo("Dataset_with_validation/annotations/val_resized.json", "Dataset_with_validation/labels/val", "Dataset_with_validation/images/val")
+    coco_to_yolo("Dataset_with_validation/annotations/test_resized.json", "Dataset_with_validation/labels/test", "Dataset_with_validation/images/test")
