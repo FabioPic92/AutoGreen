@@ -14,5 +14,5 @@ if __name__ == "__main__":
     for name in names:
         yaml_content += f"  - {name}\n"
 
-    with open("dataset.yaml", "w") as f:
+    with open("Dataset_with_validation/dataset.yaml", "w") as f:
         f.write(yaml_content)

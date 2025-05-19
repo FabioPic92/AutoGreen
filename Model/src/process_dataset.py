@@ -12,8 +12,8 @@ SRC_ANNOTATIONS_DIR = "../Dataset/annotations"
 SRC_IMAGE_TRAIN_DIR = "../Dataset/train"
 SRC_IMAGE_TEST_DIR = "../Dataset/test"
 
-DST_ANNOTATIONS_DIR = "annotations"
-DST_IMAGE_DIR = "images"
+DST_ANNOTATIONS_DIR = "Dataset_with_validation/annotations"
+DST_IMAGE_DIR = "Dataset_with_validation/images"
 DST_TRAIN_DIR = os.path.join(DST_IMAGE_DIR, "train")
 DST_VAL_DIR = os.path.join(DST_IMAGE_DIR, "val")
 DST_TEST_DIR = os.path.join(DST_IMAGE_DIR, "test")
@@ -24,7 +24,7 @@ os.makedirs(DST_VAL_DIR, exist_ok=True)
 os.makedirs(DST_TEST_DIR, exist_ok=True)
 
 def load_file_dataset_json(path_annotations_json):
-    with open(os.path.join(path_annotations_json, "train.json"), "r") as f:
+    with open(path_annotations_json, "r") as f:
         data = json.load(f)
 
     images = data["images"]
@@ -48,8 +48,8 @@ def letterbox_resize(image, target_size=(1280, 1280), color=(114, 114, 114)):
                                     cv2.BORDER_CONSTANT, value=color)
     return img_padded, scale, (pad_w, pad_h)
 
-def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path, target_size):
-    images, annotations, categories, info, licenses = load_file_dataset_json(json_path)
+def process_coco_split(json_name, image_src_dir, image_dst_dir, output_json_path, target_size):
+    images, annotations, categories, info, licenses = load_file_dataset_json(os.path.join(json_name))
 
     new_images = []
     new_annotations = []
@@ -100,7 +100,7 @@ def process_coco_split(json_path, image_src_dir, image_dst_dir, output_json_path
 
 
 if __name__ == "__main__":
-    images, annotations, categories, info, licenses = load_file_dataset_json(SRC_ANNOTATIONS_DIR)
+    images, annotations, categories, info, licenses = load_file_dataset_json(os.path.join(SRC_ANNOTATIONS_DIR, "train.json"))
 
     random.shuffle(images)
     val_size = int(len(images) * VAL_RATIO)
