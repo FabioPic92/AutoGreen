@@ -1,9 +1,9 @@
 # AutoGreen
-Progetto per la creazione di una serra autosufficiente (completamente automatizzato).
+Progetto per la creazione di una serra autosufficiente(completamente automatizzato).
 
 ## Modello 1
 
-Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità centrale di controllo e analisi. Il Raspberry gestirà un microcontrollore collegato, responsabile del controllo diretto del motore e della fotocamera. Le immagini acquisite verranno inviate dal microcontrollore al Raspberry, dove verranno effettuate le operazioni di elaborazione e analisi. 
+Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità centrale di controllo e analisi. Il Raspberry gestirà un microcontrollore, responsabile del controllo diretto del motore e della fotocamera. Le immagini acquisite verranno inviate dal microcontrollore al Raspberry, dove verranno effettuate le operazioni di elaborazione e analisi. 
 
 ### Struttura Meccanica e Hardware
 
@@ -106,14 +106,14 @@ Fasi per l'addestramento:
 
 
 ### Studio modello 
-Per ora si è scelto il modello YOLOv5 in quanto soddisfa le nostre necessità.
+Per ora si è scelto il modello YOLOv8 in quanto soddisfa le nostre necessità.
 In futuro si pensa di sviluppare un proprio modello
 
 ### Pre-Processed Dataset
-Come detto precedentemente il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160.
+Il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160.
 Mentre la fotocamera OV2640 ha risoluzione 1600x1200.
-In quanto il modello ho necessiatà di foto quadrata andiamo a modificare le immagini ad una size di 1280x1280.
-In secondo luogo abbiamobisogno di un set per la validazione perciò si andrà a creare 2 set Train e Val a partire dal set di Train.
+In quanto il modello ho necessiatà di foto quadrate andiamo a modificare le immagini ad una dimensione di 1280x1280.
+In secondo luogo abbiamo bisogno di un set per la validazione perciò si andrà a creare 2 set Train e Val a partire dal set di Train.
 Per convenzione si andrà a fare una divisone 80/20 dove 80 è il train e il 20 e il set di validazione.
 
 Codice:
@@ -158,6 +158,10 @@ I risultati finali ottenuti sono:
 | mAP@50-95      | 0.769      |
 
 Per ora sono buoni, bisogna fare altri test per capire se c'è bisogno di migliorare.
+
+# Camera
+
+TO-DO
 
 ## Licenza
 
