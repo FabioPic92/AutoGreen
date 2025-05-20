@@ -1,8 +1,6 @@
 #ifndef VECTOR_QUEUE_H
 #define VECTOR_QUEUE_H
 
-#include <cstring> 
-
 const int sizeVector = 10;
 
 enum TypeTask {
@@ -11,7 +9,7 @@ enum TypeTask {
     IDLE
 };
 
-struct Task{
+struct Task {
     TypeTask typeTask;
     int timeStep;
     int step;
@@ -28,7 +26,7 @@ public:
     : m_indexWrite(0), m_indexRead(0)
     {}
 
-    bool writeTask(Task newTask){
+    bool writeTask(Task newTask) {
       if(!isEmpty()){
         m_vecQueue[m_indexWrite] = newTask;
         m_indexWrite = (m_indexWrite + 1) % sizeVector;
@@ -36,20 +34,19 @@ public:
       return false;
     }
 
-    Task readTask(){
+    Task readTask() {
         if(m_indexWrite != m_indexRead)
         {
             Task task = m_vecQueue[m_indexRead];
             m_indexRead = (m_indexRead + 1) % sizeVector;
             return task;
         }
-
+        return Task(TypeTask::IDLE, 0, 0);
     }
 
-    bool isEmpty(){
+    bool isEmpty() {
       return m_indexWrite == m_indexRead;
     }
-
 };
 
 #endif

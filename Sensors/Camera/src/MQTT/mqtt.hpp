@@ -3,7 +3,6 @@
 
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include <ArduinoJson.h>
 
 const char* ssid = "A54";
 const char* password = "onow5432";
@@ -39,13 +38,13 @@ public:
     }
 
     void begin() {
-        setup_wifi();
+        setupWifi();
         client.setServer(mqttServer, mqttPort);
         client.setCallback(callbackWrapper);
     }
 
 
-    void setup_wifi() {
+    void setupWifi() {
         delay(10);
         Serial.println("\nConnecting to WiFi...");
         WiFi.begin(ssid, password);
@@ -54,9 +53,7 @@ public:
             delay(500);
             Serial.print(".");
         }
-
         Serial.println("\nWiFi connected", "Address IP: ", WiFi.localIP());
-
     }
 
     void reconnect() {
@@ -111,19 +108,6 @@ private:
         Serial.print("Messagge recrive on topic: ");
         Serial.println(topic);
 
-        char jsonBuffer[length + 1];
-        memcpy(jsonBuffer, payload, length);
-        jsonBuffer[length] = '\0';
-
-        StaticJsonDocument<256> doc;
-        DeserializationError error = deserializeJson(doc, jsonBuffer);
-
-        if (error) {
-            Serial.print("Error parsing JSON: ");
-            Serial.println(error.c_str());
-            return;
-        }
-
         m_receivedSpeed = doc["speed"] | 0;
         m_receivedDuration = doc["duration"] | 0;
         m_receivedDirection = doc["direction"] | "";
@@ -139,7 +123,6 @@ public:
     static void setInstance(Omqx* inst) {
         instance = inst;
     }
-
 };
 
 Omqx* Omqx::instance = nullptr;

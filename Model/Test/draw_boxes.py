@@ -2,8 +2,8 @@ import cv2
 import json
 import numpy as np
 
-json_path = "./Dataset_with_validation/annotations/train_resized.json"
-image_path = "./Dataset_with_validation/images/train/IMG_1147.jpg"
+json_path = "../Dataset_with_validation/annotations/train_resized.json"
+image_path = "../Dataset_with_validation/images/train/IMG_1147.jpg"
 
 image = cv2.imread(image_path)
 

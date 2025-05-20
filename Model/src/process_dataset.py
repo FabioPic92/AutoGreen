@@ -41,8 +41,8 @@ def letterbox_resize(image, target_size=(1280, 1280), color=(114, 114, 114)):
     scale = min(target_w / w, target_h / h)
     new_w, new_h = int(w * scale), int(h * scale)
     resized = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
-    pad_w = (target_w - new_w) // 2
-    pad_h = (target_h - new_h) // 2
+    pad_w = (target_w - new_w) 
+    pad_h = (target_h - new_h)
     img_padded = cv2.copyMakeBorder(resized, pad_h, target_h - new_h - pad_h,
                                     pad_w, target_w - new_w - pad_w,
                                     cv2.BORDER_CONSTANT, value=color)

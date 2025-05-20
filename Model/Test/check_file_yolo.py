@@ -1,7 +1,7 @@
 import os
 
-images_root = "Dataset_with_validation/images"
-labels_root = "Dataset_with_validation/labels"
+images_root = "../Dataset_with_validation/images"
+labels_root = "../Dataset_with_validation/labels"
 
 class_names = ["l_fully_ripened", "l_half_ripened", "l_green"]
 valid_class_ids = set(range(len(class_names)))
@@ -22,7 +22,7 @@ def check_labels(split):
         label_file = os.path.join(label_dir, base_name + ".txt")
 
         if not os.path.exists(label_file):
-            print(f"Label miss: {img_file}")
+            print(f"Label missed: {img_file}")
             errors += 1
             continue
 

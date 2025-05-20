@@ -113,7 +113,7 @@ In futuro si pensa di sviluppare un proprio modello
 Il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160.
 Mentre la fotocamera OV2640 ha risoluzione 1600x1200.
 In quanto il modello ho necessiatà di foto quadrate andiamo a modificare le immagini ad una dimensione di 1280x1280.
-In secondo luogo abbiamo bisogno di un set per la validazione perciò si andrà a creare 2 set Train e Val a partire dal set di Train.
+In secondo luogo abbiamo bisogno di un set per la validazione perciò si andrà a creare 2 set, Train e Val, a partire dal set di Train.
 Per convenzione si andrà a fare una divisone 80/20 dove 80 è il train e il 20 e il set di validazione.
 
 Codice:
@@ -121,7 +121,7 @@ Codice:
 TO-DO
 
 ### Training Model
-Per eseguire l'addestramento bisogna trasformare il dataset da coco a Yolo:
+Per eseguire l'addestramento bisogna trasformare il dataset da coco a Yolo.
 Di seguito i passaggi:
 
 1. Creazione labels nel file convert_to_yolo.py

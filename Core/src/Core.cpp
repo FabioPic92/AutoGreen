@@ -8,6 +8,6 @@ int main() {
 
     SensorProcessor processor(receiver);
     std::thread worker(&SensorProcessor::run, &processor);
-
+    
     worker.join(); 
 }
