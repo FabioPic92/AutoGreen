@@ -3,36 +3,42 @@
 
 #include <AccelStepper.h>
 
+#include "../struct.hpp"
+
 const int stepPin = 4;
 const int dirPin = 3; 
 
 class MotorStepper{
+private:
+    int m_step;
+    int m_duration;
+    Direction m_direction;
+
 public:
-    MotorStepper(int step) 
-      : m_step(step)
+    MotorStepper() {}
+
+    MotorStepper(int step, int duration, Direction direction) 
+    :   m_step(step), m_duration(duration), m_direction(direction)
     {
         pinMode(stepPin, OUTPUT);
         pinMode(dirPin, OUTPUT);
 
-        digitalWrite(dirPin, HIGH);
-    }
-
-    void step(){
-        digitalWrite(stepPin, HIGH);
-        delayMicroseconds(500);
-        digitalWrite(stepPin, LOW);
-        delayMicroseconds(500); 
-    }
-
-    void setSpeed(int step){
-        if(step > 0){
-            m_step = step;
+        if(m_direction == Direction::FORWARD) {
+            digitalWrite(dirPin, HIGH);
+        } else {
+            digitalWrite(dirPin, LOW);
         }
-        Serial.println(m_step);
     }
 
-private:
-    int m_step;
+    void execute()
+    {
+        for (int step = 0; step < m_duration; ++step) {
+            digitalWrite(stepPin, HIGH);
+            delayMicroseconds(m_step);
+            digitalWrite(stepPin, LOW);
+            delayMicroseconds(m_step);
+        }
+    }
 };
 
 #endif

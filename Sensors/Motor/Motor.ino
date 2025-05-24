@@ -1,18 +1,22 @@
 #include "src/MotorStepper/MotorStepper.hpp"
-#include "src/MQTT/Schedule.hpp"
+#include "src/Schedule/Schedule.hpp"
 #include "src/MQTT/mqtt.hpp"
 
-int led =  LED_BUILTIN;
-
-MotorStepper motorStepper(20);
-
 Omqx mqtt;
+Schedule schedule;
 
 void setup() {
     Serial.begin(9600);
             
+    Omqx::setInstance(&mqtt); 
+    Omqx::setMessageCallback(Schedule::handleMqttMessage); 
+    mqtt.begin();   
 }
 
 void loop() {
-    motorStepper.step();
+    mqtt.loop(); 
+
+    if(!schedule.isEmpty()){
+        schedule.execute();
+    }
 }

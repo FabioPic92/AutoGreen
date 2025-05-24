@@ -2,6 +2,8 @@
 #include <chrono>
 #include <thread>
 
+#include <mqtt/async_client.h>
+
 #include <opencv2/dnn.hpp>
 #include <opencv2/opencv.hpp>
 
@@ -30,7 +32,7 @@ int main() {
 
     try {
         client.connect(connOpts)->wait();
-        client.subscribe("sensors/Camera", 1);
+        client.subscribe("sensors/Motor", 1);
         while (true) {
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }

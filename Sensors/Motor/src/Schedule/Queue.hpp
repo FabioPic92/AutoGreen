@@ -1,26 +1,13 @@
 #ifndef VECTOR_QUEUE_H
 #define VECTOR_QUEUE_H
 
+#include "Task.hpp"
+
 const int sizeVector = 10;
-
-enum TypeTask {
-    PHOTO,
-    IDLE
-};
-
-struct Task {
-    TypeTask m_typeTask;
-    int m_timeStep;
-    int m_step;
-
-    // Task(TypeTask typeTask, int timeStep, int step)
-    // : m_typeTask(typeTask), m_timeStep(timeStep), m_step(step)
-    // {}
-};
 
 class Queue {
 private:
-    Task m_vecQueue[sizeVector];
+    MotorTask m_vecQueue[sizeVector];
     int m_indexWrite;
     int m_indexRead;
 
@@ -29,23 +16,22 @@ public:
     : m_indexWrite(0), m_indexRead(0)
     {}
 
-    bool writeTask(Task newTask) {
-      if(!isEmpty()){
+    bool writeTask(MotorTask newTask) {
+      if(isEmpty()){
         m_vecQueue[m_indexWrite] = newTask;
         m_indexWrite = (m_indexWrite + 1) % sizeVector;
       }
       return false;
     }
 
-    Task readTask() {
+    MotorTask readTask() {
         if(m_indexWrite != m_indexRead)
         {
-            Task task = m_vecQueue[m_indexRead];
+            MotorTask task = m_vecQueue[m_indexRead];
             m_indexRead = (m_indexRead + 1) % sizeVector;
             return task;
         }
-        Task task;
-        return task;
+        return MotorTask();
     }
 
     bool isEmpty() {

@@ -1,6 +1,8 @@
 #ifndef MQTT_H
 #define MQTT_H
 
+#include "../struct.hpp"
+
 #include <WiFi.h>
 #include <PubSubClient.h>
 
@@ -12,6 +14,7 @@ const int mqttPort = 1883;
 const char* mqttUser = "admin";
 const char* mqttPassword = "public";
 
+typedef void (*MessageCallback)(uint16_t step, uint16_t duration, Direction direction);
 
 String getMacAddress() {
     uint8_t mac[6];
@@ -28,9 +31,11 @@ private:
     WiFiClient espClient;
     PubSubClient client;
 
-    int m_receivedSpeed = 0;
-    int m_receivedDuration = 0;
-    String m_receivedDirection = "";
+    uint16_t m_receivedSpeed = 0;
+    uint16_t m_receivedDuration = 0;
+    Direction m_receivedDirection;
+
+    static MessageCallback userCallback;
 
 public:
     Omqx() : client(espClient) 
@@ -42,7 +47,6 @@ public:
         client.setServer(mqttServer, mqttPort);
         client.setCallback(callbackWrapper);
     }
-
 
     void setupWifi() {
         delay(10);
@@ -58,11 +62,11 @@ public:
 
     void reconnect() {
         while(!client.connected()) {
-            Serial.print("Connetting to broker MQTT...");
-            String clientId = "ESP32Client-" + getMacAddress();
+            Serial.println("Connetting to broker MQTT...");
+            String clientId = "Motor-" + getMacAddress();
             if (client.connect(clientId.c_str(), mqttUser, mqttPassword)) {
                 Serial.println("Connected!");
-                subscribe("raspberry/camera");
+                subscribe("core/Motor");
             } else {
                 Serial.print(client.state());
                 delay(5000);
@@ -97,24 +101,33 @@ public:
 
     int getSpeed() const { return m_receivedSpeed; }
     int getDuration() const { return m_receivedDuration; }
-    String getDirection() const { return m_receivedDirection; }
+    Direction getDirection() const { return m_receivedDirection; }
+
+    static void setMessageCallback(MessageCallback cb) {
+        userCallback = cb;
+    }
 
 private:
+
     static void callbackWrapper(char* topic, byte* payload, unsigned int length) {
         instance->handleCallback(topic, payload, length);
     }
 
     void handleCallback(char* topic, byte* payload, unsigned int length) {
-        Serial.print("Messagge recrive on topic: ");
+        Serial.print("Messagge receive on topic: ");
         Serial.println(topic);
 
-        // m_receivedSpeed = doc["speed"] | 0;
-        // m_receivedDuration = doc["duration"] | 0;
-        // m_receivedDirection = doc["direction"] | "";
+        uint16_t step = payload[0] | (payload[1] << 8);
+        uint16_t duration = payload[2] | (payload[3] << 8);
+        uint8_t directionVal = payload[4];    
 
-        // Serial.print("Speed: "); Serial.println(m_receivedSpeed);
-        // Serial.print("Duration: "); Serial.println(m_receivedDuration);
-        // Serial.print("Direction: "); Serial.println(m_receivedDirection);
+        m_receivedSpeed = step;
+        m_receivedDuration = duration;
+        m_receivedDirection = (directionVal == 0) ? FORWARD : REVERSE;
+
+        if (userCallback) {
+            userCallback(step, duration, (directionVal == 0) ? FORWARD : REVERSE);
+        }
     }
 
     static Omqx* instance;
@@ -126,5 +139,6 @@ public:
 };
 
 Omqx* Omqx::instance = nullptr;
+MessageCallback Omqx::userCallback = nullptr;
 
 #endif

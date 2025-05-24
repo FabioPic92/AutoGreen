@@ -7,7 +7,7 @@ else()
     message(WARNING "utils: no file .cpp found!")
 endif()
 
-add_subdirectory(Camera)
+add_subdirectory(Motor)
 
 add_executable(core Core.cpp)
 
