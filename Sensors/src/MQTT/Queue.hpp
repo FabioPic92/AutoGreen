@@ -35,13 +35,15 @@ public:
     }
 
     Task readTask() {
-        if(m_indexWrite != m_indexRead)
-        {
-            Task task = m_vecQueue[m_indexRead];
-            m_indexRead = (m_indexRead + 1) % sizeVector;
-            return task;
-        }
-        return Task(TypeTask::IDLE, 0, 0);
+        // if(m_indexWrite != m_indexRead)
+        // {
+        //     Task task = m_vecQueue[m_indexRead];
+        //     m_indexRead = (m_indexRead + 1) % sizeVector;
+        //     return task;
+        // }
+        // return Task(TypeTask::IDLE, 0, 0);
+        Task task;
+        return task;
     }
 
     bool isEmpty() {

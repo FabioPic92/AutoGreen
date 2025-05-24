@@ -10,17 +10,9 @@ Omqx mqtt;
 
 void setup() {
     Serial.begin(9600);
-    
-
-    // Omqx::setInstance(&mqtt);  
-    // mqtt.begin();              
+            
 }
 
 void loop() {
-    // mqtt.loop();
-
-    // int speed = mqtt.getSpeed();
-    // int duration = mqtt.getDuration();
-    // String direction = mqtt.getDirection();
     motorStepper.step();
 }

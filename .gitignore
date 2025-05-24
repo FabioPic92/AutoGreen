@@ -7,7 +7,6 @@ settings.py
 
 .Python
 env/
-build/
 develop-eggs/
 dist/
 downloads/

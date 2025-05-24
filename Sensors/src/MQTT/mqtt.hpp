@@ -1,7 +1,13 @@
 #ifndef MQTT_H
 #define MQTT_H
 
-#include <WiFi.h>
+#if defined(ESP32) || defined(ESP32S3) || defined(ESP8266)
+  #include <WiFi.h>
+#elif defined(ARDUINO_SAMD_WIFI) || defined(ARDUINO_NINA_WIFI) || defined(ARDUINO_WIFI_S3)
+  #include <WiFiS3.h>
+#else
+#endif
+
 #include <PubSubClient.h>
 
 const char* ssid = "A54";
@@ -53,7 +59,7 @@ public:
             delay(500);
             Serial.print(".");
         }
-        Serial.println("\nWiFi connected", "Address IP: ", WiFi.localIP());
+        Serial.println(WiFi.localIP());
     }
 
     void reconnect() {
@@ -64,7 +70,7 @@ public:
                 Serial.println("Connected!");
                 subscribe("raspberry/camera");
             } else {
-                Serial.print("Error, rc=", client.state(), "... 5 seconds");
+                Serial.print(client.state());
                 delay(5000);
             }
         }
@@ -108,13 +114,6 @@ private:
         Serial.print("Messagge recrive on topic: ");
         Serial.println(topic);
 
-        m_receivedSpeed = doc["speed"] | 0;
-        m_receivedDuration = doc["duration"] | 0;
-        m_receivedDirection = doc["direction"] | "";
-
-        Serial.print("Speed: "); Serial.println(m_receivedSpeed);
-        Serial.print("Duration: "); Serial.println(m_receivedDuration);
-        Serial.print("Direction: "); Serial.println(m_receivedDirection);
     }
 
     static Omqx* instance;
