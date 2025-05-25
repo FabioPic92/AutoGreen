@@ -65,7 +65,6 @@ release/
 
 .pio/
 
-platformio.ini
 
 .idea/
 .vscode/

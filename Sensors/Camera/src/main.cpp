@@ -1,16 +1,20 @@
-#include <Arduino.h>  
-#include "Schedule.hpp"
-#include "mqtt.hpp"
+#include "wifi.hpp"
+#include "camera_web.hpp"
+#include "camera_mqtt.hpp"
 
-Omqx mqtt;
+CameraWeb *cameraWeb;
+CameraMQTT cameraMqtt;
 
 void setup() {
-    Serial.begin(9600);
-    
-    Omqx::setInstance(&mqtt);  
-    mqtt.begin();              
+  Serial.begin(115200);
+
+  connectWifi();
+
+  cameraWeb = new CameraWeb(cameraMqtt); 
+  cameraWeb->begin(); 
 }
 
 void loop() {
-    mqtt.loop();
+  cameraWeb->loop();
+  cameraMqtt.loop();
 }
