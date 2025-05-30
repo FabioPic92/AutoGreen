@@ -6,7 +6,7 @@ enum Direction{
     REVERSE
 };
 
-enum TypeMotorTask {
+enum TypeTask {
     MOVE,
     IDLE
 };

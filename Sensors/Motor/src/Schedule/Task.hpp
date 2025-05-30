@@ -4,20 +4,18 @@
 #include "../MotorStepper/MotorStepper.hpp"
 #include "../struct.hpp"
 
-class MotorTask {
+class Task {
 private:
     MotorStepper m_motorStepper;
-
-    TypeMotorTask m_typeTask;
-
+    TypeTask m_typeTask;
 public:
-    MotorTask(){}
-    MotorTask(TypeMotorTask typeTask, MotorStepper motorStepper)
+    Task(){}
+    Task(TypeTask typeTask, MotorStepper motorStepper)
     :   m_typeTask(typeTask), m_motorStepper(motorStepper)
     {}
 
     void execute() {
-        if(m_typeTask == TypeMotorTask::MOVE){
+        if(m_typeTask == TypeTask::MOVE){
             Serial.println("Start Execution");
             m_motorStepper.execute();
             Serial.println("Stop Execution");

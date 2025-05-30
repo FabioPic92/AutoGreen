@@ -11,11 +11,11 @@ public:
         Schedule::instance = this;
     }
 
-    void AddTask(const MotorTask& task) {
+    void AddTask(const Task& task) {
         m_queue.writeTask(task);
     }
 
-    MotorTask RemoveTask() {
+    Task RemoveTask() {
         return m_queue.readTask();
     }
 
@@ -25,7 +25,7 @@ public:
 
     bool execute() {
         while(!m_queue.isEmpty()){
-            MotorTask task = RemoveTask();
+            Task task = RemoveTask();
             task.execute();
             Serial.println("Remove");
         }
@@ -36,7 +36,7 @@ public:
         int iStep = static_cast<int>(step);
         int iDuration = static_cast<int>(duration);
         MotorStepper motorStpper(iStep, iDuration, dir); 
-        MotorTask task(TypeMotorTask::MOVE, motorStpper);
+        Task task(TypeTask::MOVE, motorStpper);
         Serial.println("Add");
         AddTask(task);
     }

@@ -1,7 +1,0 @@
-{
-  "name": "MQTT",
-  "version": "1.0.0",
-  "dependencies": [
-    "knolleary/PubSubClient"
-  ]
-}

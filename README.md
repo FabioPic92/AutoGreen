@@ -1,16 +1,17 @@
 # AutoGreen
 Progetto per la creazione di una serra autosufficiente(completamente automatizzato).
 
-## Modello 1
+## Modello 1 v0.1
 
-Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità centrale di controllo e analisi. Il Raspberry gestirà un microcontrollore, responsabile del controllo diretto del motore e della fotocamera. Le immagini acquisite verranno inviate dal microcontrollore al Raspberry, dove verranno effettuate le operazioni di elaborazione e analisi. 
+Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità centrale di controllo e analisi. Il Raspberry gestirà 2  microcontrollori, uno responsabile del controllo del motore e unno per la gestione fotocamera. Le immagini acquisite verranno inviate dal microcontrollore al Raspberry, dove verranno effettuate le operazioni di elaborazione e analisi. 
 
 ### Struttura Meccanica e Hardware
 
 ####  Componenti Principali Hardware:
 
 - **Microcontrollore**:
-  - **Esp-S3**, per il controllo del Motore stepper e della fotocamera.
+  - **Arduino Uno R4**, per il controllo del Motore stepper.
+  - **Esp32-S3 Camera**, per la gestione della fotocamera.
   - **Raspberry Pi3 Model B**, Per la gestine dei vari microcontrollori ed esecuzione di task.
 - **Attuatori**:
   - **Motore Stepper Nema 17 17hs15-1504sx1**, Motore che serve per alzare e abbassare la piastra che contiene la fotocamera.
@@ -19,8 +20,8 @@ Il sistema sarà composto da un Raspberry Pi 3 Model B che fungerà da unità ce
 
 #### Struttura Meccanica
 
-La parte meccanica consisterà in una piastra che conterrà il microcontrollore, gli attuatori e la fotocamera.
-verrà attaccata ad un asta attraverso una ruota dentata.
+La parte meccanica consisterà in una piastra che conterrà il Esp32-S3 Camera.
+Verrà attaccata ad un vite trapezoidale che verrà fatta girare con il motore stepper.
 
 ### Software e Programmazione
 
@@ -91,6 +92,284 @@ sudo apt install libopencv-dev python3-opencv
 
 TO-DO
 
+### Motore
+
+La parte centrale comunica con il motore utilizzando la versione open source EMQX del protocollo MQTT 
+
+# Motore
+
+### Componenti
+
+1. Motore Stepper - Nema17 17hs15-1504sx1
+2. Arduino Uno r4 wifi
+3. Microstepping Bipolar Stepper Motor Driver - A4988
+4. Condensatore 100uF 50v
+
+### Collegamento
+
+![MotorComponent](img/MotorComponent.png)
+
+## Dati Motore
+
+1. Step: uint16_t, numero step
+2. Duration: uint16_t, tempo di step
+3. Direction: enum { FORWARD, REVERSE }, direzione motore
+
+## Struttura Dati
+
+### Tipo di task
+
+```cpp
+enum TypeTask {
+    MOVE,
+    IDLE
+};
+```
+
+### Vettore circolare(Queue)
+
+```cpp
+const int sizeVector = 10;
+
+class Queue {
+private:
+    Task m_vecQueue[sizeVector];
+    int m_indexWrite;
+    int m_indexRead;
+
+public:
+    Queue()
+    : m_indexWrite(0), m_indexRead(0)
+    {}
+
+    bool writeTask(Task newTask) {
+      if(isEmpty()){
+        m_vecQueue[m_indexWrite] = newTask;
+        m_indexWrite = (m_indexWrite + 1) % sizeVector;
+      }
+      return false;
+    }
+
+    Task readTask() {
+        if(m_indexWrite != m_indexRead)
+        {
+            Task task = m_vecQueue[m_indexRead];
+            m_indexRead = (m_indexRead + 1) % sizeVector;
+            return task;
+        }
+        return Task();
+    }
+
+    bool isEmpty() {
+      return m_indexWrite == m_indexRead;
+    }
+};
+```
+
+### Schedule
+
+Lo schedule viene usate per gestire i vari tipi di messaggio che ricevo. I messaggio vengono messi in una coda e vengono processati.
+
+```cpp
+class Schedule{
+private:
+    Queue m_queue;
+public:
+    Schedule() {
+        Schedule::instance = this;
+    }
+
+    void AddTask(const Task& task) {
+        m_queue.writeTask(task);
+    }
+
+    Task RemoveTask() {
+        return m_queue.readTask();
+    }
+
+    bool isEmpty() {
+        return m_queue.isEmpty();
+    } 
+
+    bool execute() {
+        while(!m_queue.isEmpty()){
+            Task task = RemoveTask();
+            task.execute();
+            Serial.println("Remove");
+        }
+        return true;
+    }
+
+    void updateSchedule(uint16_t step, uint16_t duration, Direction dir) {
+        int iStep = static_cast<int>(step);
+        int iDuration = static_cast<int>(duration);
+        MotorStepper motorStpper(iStep, iDuration, dir); 
+        Task task(TypeTask::MOVE, motorStpper);
+        Serial.println("Add");
+        AddTask(task);
+    }
+
+    static void handleMqttMessage(uint16_t step, uint16_t duration, Direction dir) {
+        if (instance != nullptr) {
+            instance->updateSchedule(step, duration, dir);
+        }
+    }
+
+private:
+    static Schedule* instance;
+};
+
+Schedule* Schedule::instance = nullptr;
+```
+
+## Gestione Messaggi
+
+La gestione dei dati avviene utilizzando il protocollo MQTT, nello specifico in arduino viene utilizzata la libreria PubSubClient.
+```cpp
+
+#include <WiFi.h>
+#include <PubSubClient.h>
+
+const char* ssid = "";
+const char* password = "";
+
+const char* mqttServer = "192.168.180.85";
+const int mqttPort = 1883;
+const char* mqttUser = "admin";
+const char* mqttPassword = "public";
+
+typedef void (*MessageCallback)(uint16_t step, uint16_t duration, Direction direction);
+
+String getMacAddress() {
+    uint8_t mac[6];
+    WiFi.macAddress(mac); 
+    char macStr[18];   
+    snprintf(macStr, sizeof(macStr),
+             "%02X:%02X:%02X:%02X:%02X:%02X",
+             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    return String(macStr);
+}
+
+class Omqx {
+private:
+    WiFiClient espClient;
+    PubSubClient client;
+
+    uint16_t m_receivedSpeed = 0;
+    uint16_t m_receivedDuration = 0;
+    Direction m_receivedDirection;
+
+    static MessageCallback userCallback;
+
+public:
+    Omqx() : client(espClient) 
+    {
+    }
+
+    void begin() {
+        setupWifi();
+        client.setServer(mqttServer, mqttPort);
+        client.setCallback(callbackWrapper);
+    }
+
+    void setupWifi() {
+        delay(10);
+        Serial.println("\nConnecting to WiFi...");
+        WiFi.begin(ssid, password);
+
+        while(WiFi.status() != WL_CONNECTED) {
+            delay(500);
+            Serial.print(".");
+        }
+        Serial.println(WiFi.localIP());
+    }
+
+    void reconnect() {
+        while(!client.connected()) {
+            Serial.println("Connetting to broker MQTT...");
+            String clientId = "Motor-" + getMacAddress();
+            if (client.connect(clientId.c_str(), mqttUser, mqttPassword)) {
+                Serial.println("Connected!");
+                subscribe("core/Motor");
+            } else {
+                Serial.print(client.state());
+                delay(5000);
+            }
+        }
+    }
+
+    void subscribe(const char* topic) {
+        if(client.connected()) {
+            client.subscribe(topic);
+            Serial.print("Subscribe on topic: ");
+            Serial.println(topic);
+        }
+    }
+
+    void publish(const char* topic, const char* message) {
+        if(client.connected()) {
+            client.publish(topic, message);
+            Serial.print("Pubblic on");
+            Serial.print(topic);
+            Serial.print(": ");
+            Serial.println(message);
+        }
+    }
+
+    void loop() {
+        if(!client.connected()) {
+            reconnect();
+        }
+        client.loop();
+    }
+
+    int getSpeed() const { return m_receivedSpeed; }
+    int getDuration() const { return m_receivedDuration; }
+    Direction getDirection() const { return m_receivedDirection; }
+
+    static void setMessageCallback(MessageCallback cb) {
+        userCallback = cb;
+    }
+
+private:
+
+    static void callbackWrapper(char* topic, byte* payload, unsigned int length) {
+        instance->handleCallback(topic, payload, length);
+    }
+
+    void handleCallback(char* topic, byte* payload, unsigned int length) {
+        Serial.print("Messagge receive on topic: ");
+        Serial.println(topic);
+
+        uint16_t step = payload[0] | (payload[1] << 8);
+        uint16_t duration = payload[2] | (payload[3] << 8);
+        uint8_t directionVal = payload[4];    
+
+        m_receivedSpeed = step;
+        m_receivedDuration = duration;
+        m_receivedDirection = (directionVal == 0) ? FORWARD : REVERSE;
+
+        if (userCallback) {
+            userCallback(step, duration, (directionVal == 0) ? FORWARD : REVERSE);
+        }
+    }
+
+    static Omqx* instance;
+
+public:
+    static void setInstance(Omqx* inst) {
+        instance = inst;
+    }
+};
+
+Omqx* Omqx::instance = nullptr;
+MessageCallback Omqx::userCallback = nullptr;
+```
+
+# Camera
+
+TO-DO
+
 # Model
 
 Il primo modello scelto avrà lo scopo di riconoscere se una pianta di pomodorini sarà matura o no.
@@ -103,7 +382,6 @@ Fasi per l'addestramento:
 2. Pre-processing Dataset
 3. Training Model
 4. Test Model
-
 
 ### Studio modello 
 Per ora si è scelto il modello YOLOv8 in quanto soddisfa le nostre necessità.
@@ -159,9 +437,6 @@ I risultati finali ottenuti sono:
 
 Per ora sono buoni, bisogna fare altri test per capire se c'è bisogno di migliorare.
 
-# Camera
-
-TO-DO
 
 ## Licenza
 

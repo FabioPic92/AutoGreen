@@ -7,7 +7,7 @@ const int sizeVector = 10;
 
 class Queue {
 private:
-    MotorTask m_vecQueue[sizeVector];
+    Task m_vecQueue[sizeVector];
     int m_indexWrite;
     int m_indexRead;
 
@@ -16,7 +16,7 @@ public:
     : m_indexWrite(0), m_indexRead(0)
     {}
 
-    bool writeTask(MotorTask newTask) {
+    bool writeTask(Task newTask) {
       if(isEmpty()){
         m_vecQueue[m_indexWrite] = newTask;
         m_indexWrite = (m_indexWrite + 1) % sizeVector;
@@ -24,14 +24,14 @@ public:
       return false;
     }
 
-    MotorTask readTask() {
+    Task readTask() {
         if(m_indexWrite != m_indexRead)
         {
-            MotorTask task = m_vecQueue[m_indexRead];
+            Task task = m_vecQueue[m_indexRead];
             m_indexRead = (m_indexRead + 1) % sizeVector;
             return task;
         }
-        return MotorTask();
+        return Task();
     }
 
     bool isEmpty() {
