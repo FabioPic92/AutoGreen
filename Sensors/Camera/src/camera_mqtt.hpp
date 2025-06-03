@@ -59,27 +59,28 @@ private:
         if (strcmp(topic, "camera/request") == 0) {
             Serial.println("Scatto della foto richiesto!");
 
-        //     camera_fb_t* fb = esp_camera_fb_get();
-        //     if (!fb) {
-        //         Serial.println("Errore nella cattura della foto");
-        //         return;
-        //     }
+            camera_fb_t* fb = esp_camera_fb_get();
+            if (!fb) {
+                Serial.println("Errore nella cattura della foto");
+                return;
+            }
 
-        //     // Chunk di 2048 byte
-        //     const size_t chunkSize = 2048;
-        //     size_t offset = 0;
-        //     while (offset < fb->len) {
-        //         size_t len = min(chunkSize, fb->len - offset);
-        //         bool ok = client.publish("camera/response", fb->buf + offset, len);
-        //         if (!ok) {
-        //             Serial.println("Errore durante publish del chunk");
-        //         }
-        //         offset += len;
-        //         delay(10); // opzionale per evitare congestione
-        //     }
+            const size_t chunkSize = 2048;
+            size_t offset = 0;
+            while (offset < fb->len) {
+                size_t len = min(chunkSize, fb->len - offset);
+                bool ok = client.publish("camera/response", fb->buf + offset, len);
+                if (!ok) {
+                    Serial.println("Errore durante publish del chunk");
+                }
+                offset += len;
+                delay(10); 
+            }
 
-        //     esp_camera_fb_return(fb);
-        //     Serial.println("Foto inviata via MQTT in chunk.");
+            client.publish("camera/response", "EOF");
+
+            esp_camera_fb_return(fb);
+            Serial.println("Foto inviata via MQTT in chunk.");
         }
     }
 
