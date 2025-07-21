@@ -69,7 +69,7 @@ Versione C++
 2. cd paho.mqtt.cpp
 3. git submodule init
 4. git submodule update
-5. cmake -Bbuild -H. -DPAHO_WITH_MQTT_C=ON -DPAHO_BUILD_EXAMPLES=ON
+5. cmake -Bbuild -H.  -DPAHO_BUILD_STATIC=ON -DPAHO_BUILD_SHARED=OFF -DPAHO_WITH_MQTT_C=ON -DPAHO_BUILD_EXAMPLES=ON
 6. sudo cmake --build build/ --target install
 
 #### Tips
@@ -392,7 +392,7 @@ Il dataset è composto da foto di dimensioni quali: 3024x4032, 3120x4160.
 Mentre la fotocamera OV2640 ha risoluzione 1600x1200.
 In quanto il modello ho necessiatà di foto quadrate andiamo a modificare le immagini ad una dimensione di 1280x1280.
 In secondo luogo abbiamo bisogno di un set per la validazione perciò si andrà a creare 2 set, Train e Val, a partire dal set di Train.
-Per convenzione si andrà a fare una divisone 80/20 dove 80 è il train e il 20 e il set di validazione.
+Per convenzione si andrà a fare una divisone 80/20 dove 80 è il train e il 20 è il set di validazione.
 
 Codice:
 

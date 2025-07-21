@@ -6,6 +6,8 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Finestra Vuota di Test Qt");
     resize(800, 600);
 
+    setupMainWindow();
+
 }
 
 MainWindow::~MainWindow() {

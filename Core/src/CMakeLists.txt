@@ -27,16 +27,16 @@ target_link_libraries(core PRIVATE
     Qt6::Widgets
     utils
     # ${OpenCV_LIBS}
-    # ${PahoMqttCpp_SHARED_LIBRARY}
-    # ${PahoMqttC_SHARED_LIBRARY}
-    # pthread
+    ${PahoMqttCpp_SHARED_LIBRARY}
+    ${PahoMqttC_SHARED_LIBRARY}
+    pthread
 )
 
 target_include_directories(core PRIVATE
     ${CMAKE_SOURCE_DIR}/include 
     #${OpenCV_INCLUDE_DIRS}
-    #"${CMAKE_SOURCE_DIR}/external/paho/paho.mqtt.c/src"
-    #"${CMAKE_SOURCE_DIR}/external/paho/paho.mqtt.cpp/include/mqtt"
+    "${CMAKE_SOURCE_DIR}/external/paho/paho.mqtt.c/src"
+    "${CMAKE_SOURCE_DIR}/external/paho/paho.mqtt.cpp/include/mqtt"
     #"${CMAKE_SOURCE_DIR}/external/json/single_include"
 )
 
